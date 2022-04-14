@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.centrocomercialgui.controller.CentroController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.centrocomercialgui.controller.CentroController">
    <top>
       <VBox prefHeight="72.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -21,9 +21,10 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Ficheiro">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Novo Centro" />
+                    <MenuItem mnemonicParsing="false" onAction="#novoCentroAction" text="Novo Centro" />
                         <MenuItem mnemonicParsing="false" onAction="#abrirCentroAction" text="Abrir Centro..." />
-                        <MenuItem mnemonicParsing="false" text="Gravar..." />
+                        <MenuItem fx:id="saveItem" disable="true" mnemonicParsing="false" onAction="#saveAction" text="Gravar..." />
+                        <MenuItem fx:id="saveAsItem" disable="true" mnemonicParsing="false" onAction="#saveAsAction" text="Gravar como..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#sairAction" text="Sair" />
                   </items>
@@ -38,6 +39,23 @@
                   <Insets left="20.0" top="5.0" />
                </VBox.margin>
             </Label>
+            <HBox fx:id="buttonBox" disable="true" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#novaLojaAction" text="Nova Loja">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Editar Propriedades das Lojas">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </HBox>
          </children>
       </VBox>
    </top>
