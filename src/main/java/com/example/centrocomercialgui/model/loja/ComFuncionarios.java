@@ -44,9 +44,9 @@ public abstract class ComFuncionarios extends Loja
      * @param receitas as receitas
      * @param numeroFuncionarios numero de funcionários
      */
-    public ComFuncionarios(int id, String nome, int area, float receitas, int numeroFuncionarios)
+    public ComFuncionarios(int id, String nome, int area, float receitas, int numeroFuncionarios, TipoLoja tipoLoja)
     {
-        super(id, nome, area, receitas);
+        super(id, nome, area, receitas, tipoLoja);
         this.numeroFuncionarios = numeroFuncionarios;
     }
 

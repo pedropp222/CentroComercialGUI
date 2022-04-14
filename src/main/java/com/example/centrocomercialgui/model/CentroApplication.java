@@ -1,4 +1,4 @@
-package com.example.centrocomercialgui;
+package com.example.centrocomercialgui.model;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +14,7 @@ public class CentroApplication extends Application
     @Override
     public void start(Stage stage) throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(CentroApplication.class.getResource("centro-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/com/example/centrocomercialgui/centro-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Centro Comercial Manager");
         stage.setScene(scene);

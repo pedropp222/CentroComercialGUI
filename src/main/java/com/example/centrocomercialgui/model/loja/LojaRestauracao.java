@@ -18,6 +18,7 @@ public class LojaRestauracao extends Comum implements ComSeguranca
     public LojaRestauracao()
     {
         super();
+        setTipoLoja(TipoLoja.RESTAURANTE);
     }
 
     /**
@@ -34,6 +35,7 @@ public class LojaRestauracao extends Comum implements ComSeguranca
         super(nome, area, receitas, numeroFuncionarios);
         this.numMesas = numMesas;
         this.custoManutencao = custoManutencao;
+        setTipoLoja(TipoLoja.RESTAURANTE);
     }
 
     /**
@@ -46,9 +48,9 @@ public class LojaRestauracao extends Comum implements ComSeguranca
      * @param numMesas o número de mesas do Restaurante
      * @param custoManutencao o custo de manutenção do Restaurante
      */
-    public LojaRestauracao(int id, String nome, int area, float receitas, int numeroFuncionarios, int numMesas, float custoManutencao)
+    public LojaRestauracao(int id, String nome, int area, float receitas, int numeroFuncionarios, int numMesas, float custoManutencao, TipoLoja tipoLoja)
     {
-        super(id, nome, area, receitas, numeroFuncionarios);
+        super(id, nome, area, receitas, numeroFuncionarios,tipoLoja);
         this.numMesas = numMesas;
         this.custoManutencao = custoManutencao;
     }

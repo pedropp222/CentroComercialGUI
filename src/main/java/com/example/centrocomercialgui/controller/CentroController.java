@@ -1,10 +1,10 @@
-package com.example.centrocomercialgui;
+package com.example.centrocomercialgui.controller;
 
+import com.example.centrocomercialgui.model.CentroApplication;
 import com.example.centrocomercialgui.model.loja.CentroComercial;
 import com.example.centrocomercialgui.model.loja.FileManager;
 import com.example.centrocomercialgui.model.loja.Loja;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -51,7 +51,9 @@ public class CentroController
 
     public void sairAction(ActionEvent actionEvent)
     {
-        System.exit(0);
+        //close this window and exit the application
+        CentroApplication.getMainStage().close();
+
     }
 
     private void updateTree()
@@ -83,7 +85,6 @@ public class CentroController
 
         if(selected != null && selected.getValue() != null && index != 0)
         {
-            String lojaName = selected.getValue();
             lojaBox.setDisable(false);
 
             Loja j = currentCentro.obterLoja(index-1);
