@@ -7,6 +7,7 @@ import com.example.centrocomercialgui.model.loja.Loja;
 import com.example.centrocomercialgui.model.utils.GUIUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,12 +17,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class CentroController
+public class CentroController implements Initializable
 {
 
     public StackPane treeStack;
@@ -34,6 +39,8 @@ public class CentroController
 
     private File currentFile;
     private CentroComercial currentCentro;
+
+    private int selectedLojaIndex;
 
     private boolean dirtyFile;
 
@@ -59,6 +66,7 @@ public class CentroController
                 saveItem.setDisable(false);
                 saveAsItem.setDisable(false);
 
+
                 updateWindowTitle();
             } catch (FileNotFoundException e)
             {
@@ -69,9 +77,8 @@ public class CentroController
 
     public void sairAction(ActionEvent actionEvent)
     {
-        //close this window and exit the application
-        CentroApplication.getMainStage().close();
-
+        //call onCloseRequest on this window
+        CentroApplication.getMainStage().fireEvent(new WindowEvent(CentroApplication.getMainStage(), WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
     private void updateTree()
@@ -96,17 +103,17 @@ public class CentroController
     //check if the user clicked on a loja item and if so, enable lojaBox
     private void selectLojaTree(TreeView<String> lojasTree)
     {
-        TreeItem<String> selected = lojasTree.getSelectionModel().getSelectedItem();
-
         int index = lojasTree.getSelectionModel().getSelectedIndex();
 
-        if (selected != null && selected.getValue() != null && index != 0)
+        if (index != 0)
         {
             lojaBox.setDisable(false);
 
             Loja j = currentCentro.obterLoja(index - 1);
 
             txtLojaPropriedades.setText("Propriedades de: " + j.getNome());
+
+            selectedLojaIndex = index - 1;
         } else
         {
             lojaBox.setDisable(true);
@@ -163,8 +170,10 @@ public class CentroController
             Parent root = loader.load();
 
             Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(this.getClass().getResource("/css/style.css").toExternalForm());
             stage.setTitle("Nova Loja");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
 
             loader.<NovaLojaController>getController().setCentroControllerWindow(this);
@@ -201,5 +210,41 @@ public class CentroController
         updateTree();
         dirtyFile = true;
         updateWindowTitle();
+    }
+
+    public void apagarLojaAction(ActionEvent actionEvent)
+    {
+        if (selectedLojaIndex >= 0)
+        {
+            currentCentro.removerLoja(selectedLojaIndex);
+            lojaBox.setDisable(true);
+            updateTree();
+            dirtyFile = true;
+            updateWindowTitle();
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        //update the closing window event to show a confirmation dialog
+        CentroApplication.getMainStage().setOnCloseRequest(event ->
+        {
+            if (dirtyFile)
+            {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Quer guardar o ficheiro antes de sair?", ButtonType.YES, ButtonType.NO,ButtonType.CANCEL);
+                alert.setHeaderText("Fechar aplicação");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.YES)
+                {
+                    saveAction(null);
+                }
+                else if (result.get() == ButtonType.CANCEL)
+                {
+                    event.consume();
+                }
+            }
+        });
     }
 }

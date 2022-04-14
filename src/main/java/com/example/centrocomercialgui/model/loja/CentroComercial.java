@@ -106,6 +106,23 @@ public class CentroComercial
         return lojas.remove(x);
     }
 
+    public boolean removerLoja(int index)
+    {
+        if (index < 0 || index >= lojas.size())
+        {
+            return false;
+        }
+
+        Loja x = lojas.get(index);
+
+        if (x instanceof Comum)
+        {
+            lojasComuns--;
+        }
+
+        return lojas.remove(index) != null;
+    }
+
     /**
      * Tenta remover uma loja a partir do seu ID interno (não o index do array)
      * @param id o ID a remover
