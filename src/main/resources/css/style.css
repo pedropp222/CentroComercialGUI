@@ -465,3 +465,9 @@
 .list-cell{
     -fx-padding: 10px;
 }
+
+.labelTitle
+{
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    }

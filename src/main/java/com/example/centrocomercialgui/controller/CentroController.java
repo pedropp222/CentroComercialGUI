@@ -55,20 +55,7 @@ public class CentroController implements Initializable
         {
             try
             {
-                currentCentro = FileManager.loadFile(selected.getAbsolutePath());
-                currentFile = selected;
-
-                txtCentroName.setText("Centro Comercial: " + currentCentro.getNome() + " | " + currentCentro.getMorada());
-
-                updateList();
-
-                buttonBox.setDisable(false);
-
-                saveItem.setDisable(false);
-                saveAsItem.setDisable(false);
-                tabPane.setDisable(false);
-
-                updateWindowTitle();
+                openCentroComercial(FileManager.loadFile(selected.getAbsolutePath()), selected);
             } catch (FileNotFoundException e)
             {
                 System.out.println("Erro a abrir loja?: " + e.getMessage());
@@ -85,7 +72,10 @@ public class CentroController implements Initializable
     private void updateList()
     {
         lojaList.getItems().clear();
-        lojaList.getItems().addAll(currentCentro.getLojas());
+        if (currentCentro != null)
+        {
+            lojaList.getItems().addAll(currentCentro.getLojas());
+        }
         selectLojaList(null);
     }
 
@@ -105,6 +95,35 @@ public class CentroController implements Initializable
 
     public void novoCentroAction(ActionEvent actionEvent)
     {
+        if (dirtyFile)
+        {
+            Optional<ButtonType> result = confirmationMessage("Novo Centro Comercial", "Quer guardar o ficheiro atual?");
+            if (result.get() == ButtonType.YES)
+            {
+                saveAction(null);
+            }
+        }
+
+        closeCentroComercial();
+
+        //create new windows using fxml loader, file novoCentro.fxml
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/novoCentro.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Novo Centro Comercial");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            loader.<NovoCentroController>getController().setCentroController(this);
+
+            stage.showAndWait();
+        } catch (IOException e)
+        {
+            GUIUtils.errorMessage("Erro ao abrir novo centro comercial", e.getMessage());
+        }
     }
 
     public void saveAction(ActionEvent actionEvent)
@@ -123,11 +142,12 @@ public class CentroController implements Initializable
         }
     }
 
-    public void saveAsAction(ActionEvent actionEvent)
+    public File saveAsAction(ActionEvent actionEvent)
     {
         //create a file chooser to save the file
         FileChooser fc = new FileChooser();
         fc.setTitle("Guardar Centro Comercial Como...");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiro de texto", "*.txt"));
         File selected = fc.showSaveDialog(CentroApplication.getMainStage());
 
         if (selected != null)
@@ -145,6 +165,8 @@ public class CentroController implements Initializable
                 e.printStackTrace();
             }
         }
+
+        return selected;
     }
 
     public void novaLojaAction(ActionEvent actionEvent)
@@ -210,6 +232,55 @@ public class CentroController implements Initializable
         }
     }
 
+    public void closeCentroComercial()
+    {
+        currentCentro = null;
+        currentFile = null;
+
+        buttonBox.setDisable(true);
+        saveItem.setDisable(true);
+        saveAsItem.setDisable(true);
+        tabPane.setDisable(true);
+
+        updateList();
+        updateWindowTitle();
+    }
+
+    private void openCentroComercial(CentroComercial centro, File file)
+    {
+        this.currentCentro = centro;
+        this.currentFile = file;
+        txtCentroName.setText("Centro Comercial: " + currentCentro.getNome() + " | " + currentCentro.getMorada());
+
+        updateList();
+
+        buttonBox.setDisable(false);
+
+        saveItem.setDisable(false);
+        saveAsItem.setDisable(false);
+        tabPane.setDisable(false);
+
+        updateWindowTitle();
+    }
+
+    public void criarCentroComercial(CentroComercial centro)
+    {
+        currentCentro = centro;
+        File f = saveAsAction(null);
+        if (f != null)
+        {
+            openCentroComercial(centro, f);
+        }
+    }
+
+    public Optional<ButtonType> confirmationMessage(String title, String message)
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO,ButtonType.CANCEL);
+        alert.setHeaderText(title);
+
+        return alert.showAndWait();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
@@ -218,10 +289,8 @@ public class CentroController implements Initializable
         {
             if (dirtyFile)
             {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Quer guardar o ficheiro antes de sair?", ButtonType.YES, ButtonType.NO,ButtonType.CANCEL);
-                alert.setHeaderText("Fechar aplicação");
+                Optional<ButtonType> result = confirmationMessage("Fechar", "Quer guardar o ficheiro antes de sair?");
 
-                Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.YES)
                 {
                     saveAction(null);
