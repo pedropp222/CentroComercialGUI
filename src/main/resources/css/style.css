@@ -25,6 +25,7 @@
 	-darkGray : derive(-gray,-20%);
 	-black : #444444dd;
 	-abort : #e74c3c;
+	-fx-font-size : 15px;
 }
 
 .root{
@@ -36,7 +37,7 @@
 	/* remove the ugly focus shade */
 	-fx-focus-color : transparent;
 	-fx-faint-focus-color: transparent;
-    -fx-font-size : 12px;
+
 }
 
 #flatbee-tiny{
@@ -450,5 +451,17 @@
 }
 
 .tree-cell{
+    -fx-padding: 10px;
+}
+
+.list-view{
+    -fx-padding: 10px;
+}
+
+.list-cell:selected{
+    -fx-background-color: -color;
+}
+
+.list-cell{
     -fx-padding: 10px;
 }

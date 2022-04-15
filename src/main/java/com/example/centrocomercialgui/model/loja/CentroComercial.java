@@ -325,4 +325,9 @@ public class CentroComercial
     {
         return String.format("Centro comercial:\n Nome: %s\n Morada: %s\n Quantidade de Lojas Âncora: %d\n Quantidade de Lojas Comuns: %d\n\n", nome, morada, getLojasAncora(), getLojasComuns());
     }
+
+    public ArrayList<Loja> getLojas()
+    {
+        return lojas;
+    }
 }

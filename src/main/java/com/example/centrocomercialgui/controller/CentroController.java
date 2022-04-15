@@ -36,11 +36,12 @@ public class CentroController implements Initializable
     public MenuItem saveItem;
     public MenuItem saveAsItem;
     public HBox buttonBox;
+    public ListView<Loja> lojaList;
+    public TabPane tabPane;
 
     private File currentFile;
     private CentroComercial currentCentro;
 
-    private int selectedLojaIndex;
 
     private boolean dirtyFile;
 
@@ -59,13 +60,13 @@ public class CentroController implements Initializable
 
                 txtCentroName.setText("Centro Comercial: " + currentCentro.getNome() + " | " + currentCentro.getMorada());
 
-                updateTree();
+                updateList();
 
                 buttonBox.setDisable(false);
 
                 saveItem.setDisable(false);
                 saveAsItem.setDisable(false);
-
+                tabPane.setDisable(false);
 
                 updateWindowTitle();
             } catch (FileNotFoundException e)
@@ -81,42 +82,24 @@ public class CentroController implements Initializable
         CentroApplication.getMainStage().fireEvent(new WindowEvent(CentroApplication.getMainStage(), WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
-    private void updateTree()
+    private void updateList()
     {
-        TreeItem<String> root = new TreeItem<>("Listagem de Lojas");
-        root.setExpanded(true);
-        TreeView<String> lojasTree = new TreeView(root);
-
-        for (int i = 0; i < currentCentro.getTotalLojas(); i++)
-        {
-            root.getChildren().add(new TreeItem<String>(currentCentro.obterLoja(i).toString()));
-        }
-
-
-        //call method selectLojaTree when lojasTree selected item changes
-        lojasTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectLojaTree(lojasTree));
-
-        treeStack.getChildren().clear();
-        treeStack.getChildren().add(lojasTree);
+        lojaList.getItems().clear();
+        lojaList.getItems().addAll(currentCentro.getLojas());
+        selectLojaList(null);
     }
 
-    //check if the user clicked on a loja item and if so, enable lojaBox
-    private void selectLojaTree(TreeView<String> lojasTree)
+    private void selectLojaList(Loja loja)
     {
-        int index = lojasTree.getSelectionModel().getSelectedIndex();
-
-        if (index != 0)
+        if (loja != null)
         {
             lojaBox.setDisable(false);
-
-            Loja j = currentCentro.obterLoja(index - 1);
-
-            txtLojaPropriedades.setText("Propriedades de: " + j.getNome());
-
-            selectedLojaIndex = index - 1;
-        } else
+            txtLojaPropriedades.setText("Propriedades de: " + loja.getNome());
+        }
+        else
         {
             lojaBox.setDisable(true);
+            txtLojaPropriedades.setText("Propriedades");
         }
     }
 
@@ -129,6 +112,8 @@ public class CentroController implements Initializable
         try
         {
             FileManager.saveFile(currentFile.getAbsolutePath(), currentCentro);
+            dirtyFile = false;
+            updateWindowTitle();
         } catch (IOException e)
         {
             //alert for error message
@@ -151,6 +136,7 @@ public class CentroController implements Initializable
             {
                 FileManager.saveFile(selected.getAbsolutePath(), currentCentro);
                 currentFile = selected;
+                dirtyFile = false;
                 updateWindowTitle();
             } catch (IOException e)
             {
@@ -207,18 +193,18 @@ public class CentroController implements Initializable
     public void newLoja(Loja loja)
     {
         currentCentro.adicionarLoja(loja);
-        updateTree();
+        updateList();
         dirtyFile = true;
         updateWindowTitle();
     }
 
     public void apagarLojaAction(ActionEvent actionEvent)
     {
-        if (selectedLojaIndex >= 0)
+        Loja selected = lojaList.getSelectionModel().getSelectedItem();
+        if (selected != null)
         {
-            currentCentro.removerLoja(selectedLojaIndex);
-            lojaBox.setDisable(true);
-            updateTree();
+            currentCentro.removerLoja(selected);
+            updateList();
             dirtyFile = true;
             updateWindowTitle();
         }
@@ -246,5 +232,10 @@ public class CentroController implements Initializable
                 }
             }
         });
+
+        tabPane.setDisable(true);
+
+        //event handler for selected item change on the loja list
+        lojaList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectLojaList(newValue));
     }
 }

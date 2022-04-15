@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -66,7 +67,7 @@
       </VBox>
    </top>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Listagem de Lojas">
                <content>
@@ -92,7 +93,10 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <StackPane fx:id="treeStack" prefHeight="328.0" prefWidth="300.0" />
+                        <StackPane fx:id="treeStack" prefHeight="328.0" prefWidth="300.0">
+                           <children>
+                              <ListView fx:id="lojaList" prefHeight="200.0" prefWidth="200.0" />
+                           </children></StackPane>
                         <VBox fx:id="lojaBox" disable="true" prefHeight="328.0" prefWidth="277.0" GridPane.columnIndex="1">
                            <children>
                               <Label fx:id="txtLojaPropriedades" text="Propriedades:">
