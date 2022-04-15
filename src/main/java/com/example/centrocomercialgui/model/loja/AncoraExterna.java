@@ -14,6 +14,7 @@ public class AncoraExterna extends ComFuncionarios implements ComSeguranca
     /**
      * O custo segurança desta AncoraExterna
      */
+    @UILojaElement
     private float custoSeguranca;
 
     /**

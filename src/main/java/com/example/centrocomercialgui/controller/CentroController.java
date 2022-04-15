@@ -23,8 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class CentroController implements Initializable
 {
@@ -38,6 +37,7 @@ public class CentroController implements Initializable
     public HBox buttonBox;
     public ListView<Loja> lojaList;
     public TabPane tabPane;
+    public MenuItem fecharItem;
 
     private File currentFile;
     private CentroComercial currentCentro;
@@ -85,8 +85,7 @@ public class CentroController implements Initializable
         {
             lojaBox.setDisable(false);
             txtLojaPropriedades.setText("Propriedades de: " + loja.getNome());
-        }
-        else
+        } else
         {
             lojaBox.setDisable(true);
             txtLojaPropriedades.setText("Propriedades");
@@ -101,6 +100,10 @@ public class CentroController implements Initializable
             if (result.get() == ButtonType.YES)
             {
                 saveAction(null);
+            }
+            else if (result.get() == ButtonType.CANCEL)
+            {
+                return;
             }
         }
 
@@ -171,7 +174,6 @@ public class CentroController implements Initializable
 
     public void novaLojaAction(ActionEvent actionEvent)
     {
-        //create new window using the novaLoja.fxml file
         try
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/novaLoja.fxml"));
@@ -205,8 +207,7 @@ public class CentroController implements Initializable
                 title += "*";
             }
             CentroApplication.getMainStage().setTitle(title);
-        }
-        else
+        } else
         {
             CentroApplication.getMainStage().setTitle("Centro Comercial");
         }
@@ -234,12 +235,26 @@ public class CentroController implements Initializable
 
     public void closeCentroComercial()
     {
+        if (dirtyFile)
+        {
+            Optional<ButtonType> result = confirmationMessage("Guardar Centro Comercial", "Quer guardar o ficheiro atual?");
+            if (result.get() == ButtonType.YES)
+            {
+                saveAction(null);
+            }
+            else if (result.get() == ButtonType.CANCEL)
+            {
+                return;
+            }
+        }
+
         currentCentro = null;
         currentFile = null;
 
         buttonBox.setDisable(true);
         saveItem.setDisable(true);
         saveAsItem.setDisable(true);
+        fecharItem.setDisable(true);
         tabPane.setDisable(true);
 
         updateList();
@@ -258,6 +273,7 @@ public class CentroController implements Initializable
 
         saveItem.setDisable(false);
         saveAsItem.setDisable(false);
+        fecharItem.setDisable(false);
         tabPane.setDisable(false);
 
         updateWindowTitle();
@@ -275,7 +291,7 @@ public class CentroController implements Initializable
 
     public Optional<ButtonType> confirmationMessage(String title, String message)
     {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO,ButtonType.CANCEL);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         alert.setHeaderText(title);
 
         return alert.showAndWait();
@@ -294,8 +310,7 @@ public class CentroController implements Initializable
                 if (result.get() == ButtonType.YES)
                 {
                     saveAction(null);
-                }
-                else if (result.get() == ButtonType.CANCEL)
+                } else if (result.get() == ButtonType.CANCEL)
                 {
                     event.consume();
                 }
@@ -306,5 +321,10 @@ public class CentroController implements Initializable
 
         //event handler for selected item change on the loja list
         lojaList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectLojaList(newValue));
+    }
+
+    public void closeAction(ActionEvent actionEvent)
+    {
+        closeCentroComercial();
     }
 }

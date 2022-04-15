@@ -6,6 +6,7 @@ package com.example.centrocomercialgui.model.loja;
  */
 public class AncoraPropria extends Loja implements ComSeguranca
 {
+    @UILojaElement
     private float custoSeguranca;
 
     /**

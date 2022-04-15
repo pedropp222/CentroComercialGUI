@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.centrocomercialgui.controller.CentroController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.centrocomercialgui.controller.CentroController">
    <top>
       <VBox prefHeight="72.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -32,6 +32,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#abrirCentroAction" text="Abrir Centro..." />
                         <MenuItem fx:id="saveItem" disable="true" mnemonicParsing="false" onAction="#saveAction" text="Gravar..." />
                         <MenuItem fx:id="saveAsItem" disable="true" mnemonicParsing="false" onAction="#saveAsAction" text="Gravar como..." />
+                        <MenuItem fx:id="fecharItem" disable="true" mnemonicParsing="false" onAction="#closeAction" text="Fechar" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#sairAction" text="Sair" />
                   </items>
@@ -104,12 +105,12 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Button alignment="CENTER" mnemonicParsing="false" prefWidth="120.0" text="Editar Loja">
+                              <Button alignment="CENTER" mnemonicParsing="false" prefWidth="150.0" text="Editar Loja">
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="5.0" top="10.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button alignment="CENTER" layoutX="10.0" layoutY="29.0" mnemonicParsing="false" onAction="#apagarLojaAction" prefWidth="120.0" text="Apagar Loja">
+                              <Button alignment="CENTER" layoutX="10.0" layoutY="29.0" mnemonicParsing="false" onAction="#apagarLojaAction" prefWidth="150.0" text="Apagar Loja">
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="5.0" top="10.0" />
                                  </VBox.margin>

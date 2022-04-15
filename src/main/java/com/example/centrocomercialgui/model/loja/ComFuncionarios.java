@@ -7,6 +7,7 @@ package com.example.centrocomercialgui.model.loja;
  */
 public abstract class ComFuncionarios extends Loja
 {
+    @UILojaElement
     private int numeroFuncionarios;
 
     /**

@@ -9,7 +9,10 @@ public class LojaRestauracao extends Comum implements ComSeguranca
 {
     private static float rendaFixa = 700f;
     private static float valorPorMesa = 5f;
+
+    @UILojaElement
     private int numMesas;
+    @UILojaElement
     private float custoManutencao;
 
     /**

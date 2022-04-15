@@ -1,5 +1,10 @@
 package com.example.centrocomercialgui.model.loja;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * Classe abstrata que representa uma loja. Contém todas as funcionalidades base de uma loja como o id, nome, area
  * receitas e variaveis de classe que controlam a classificação das áreas das lojas e a contagem global de lojas
@@ -8,8 +13,12 @@ package com.example.centrocomercialgui.model.loja;
 public abstract class Loja implements Comparable<Loja>
 {
     private int id = 0;
+
+    @UILojaElement
     private String nome;
+    @UILojaElement
     private int area;
+    @UILojaElement
     private float receitas;
     private static int totalLojas = 0;
 
@@ -61,6 +70,12 @@ public abstract class Loja implements Comparable<Loja>
         totalLojas = Math.max(totalLojas,id);
         totalLojas++;
         this.tipoLoja = tipoLoja;
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface UILojaElement
+    {
     }
 
     /**
