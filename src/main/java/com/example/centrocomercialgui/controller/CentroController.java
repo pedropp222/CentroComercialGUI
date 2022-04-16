@@ -327,4 +327,50 @@ public class CentroController implements Initializable
     {
         closeCentroComercial();
     }
+
+    public void editarLojaAction(ActionEvent actionEvent)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/novaLoja.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(this.getClass().getResource("/css/style.css").toExternalForm());
+            stage.setTitle("Editar Loja");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            loader.<NovaLojaController>getController().setCentroControllerWindow(this);
+            loader.<NovaLojaController>getController().setWorkingLoja(lojaList.getSelectionModel().getSelectedItem());
+
+            stage.show();
+        } catch (Exception e)
+        {
+            //alert for error message
+            GUIUtils.errorMessage("Erro ao abrir janela", "Erro: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void editLoja(Loja workingLoja)
+    {
+        if (workingLoja != null)
+        {
+            currentCentro.substituirLoja(lojaList.getSelectionModel().getSelectedItem(), workingLoja);
+
+            updateList();
+
+            dirtyFile = true;
+            updateWindowTitle();
+
+            lojaList.getSelectionModel().select(workingLoja);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Loja editada");
+            alert.setHeaderText("Loja editada com sucesso");
+            alert.showAndWait();
+        }
+    }
 }

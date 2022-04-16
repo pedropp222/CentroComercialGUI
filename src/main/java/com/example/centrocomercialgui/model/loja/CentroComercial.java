@@ -169,6 +169,15 @@ public class CentroComercial
         lojas.add(x);
     }
 
+    public void substituirLoja(Loja atual, Loja nova)
+    {
+        if (nova instanceof Comum && !(atual instanceof Comum))
+        {
+            lojasComuns++;
+        }
+        lojas.set(lojas.indexOf(atual), nova);
+    }
+
     /**
      * Ordena a lista de lojas usando um qualquer comparator do tipo loja
      * @param sorter o comparator a ser usado

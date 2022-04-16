@@ -15,7 +15,7 @@
    <bottom>
       <FlowPane alignment="CENTER" prefHeight="71.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#criarLojaAction" prefWidth="120.0" text="Criar">
+            <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#criarLojaAction" prefWidth="120.0" text="Criar">
                <FlowPane.margin>
                   <Insets left="20.0" right="20.0" />
                </FlowPane.margin>
