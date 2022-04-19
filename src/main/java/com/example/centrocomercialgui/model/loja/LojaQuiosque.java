@@ -13,6 +13,7 @@ public class LojaQuiosque extends Comum
     public LojaQuiosque()
     {
         super();
+        setTipoLoja(TipoLoja.QUIOSQUE);
     }
 
     /**
@@ -25,6 +26,7 @@ public class LojaQuiosque extends Comum
     public LojaQuiosque(String nome, int area, float receitas, int numeroFuncionarios)
     {
         super(nome, area, receitas, numeroFuncionarios);
+        setTipoLoja(TipoLoja.QUIOSQUE);
     }
 
     /**
@@ -35,9 +37,9 @@ public class LojaQuiosque extends Comum
      * @param receitas a receita do Quiosque
      * @param numeroFuncionarios o número de funcionários do Quiosque
      */
-    public LojaQuiosque(int id, String nome, int area, float receitas, int numeroFuncionarios)
+    public LojaQuiosque(int id, String nome, int area, float receitas, int numeroFuncionarios, TipoLoja tipoLoja)
     {
-        super(id, nome, area, receitas, numeroFuncionarios);
+        super(id, nome, area, receitas, numeroFuncionarios, tipoLoja);
     }
 
     /**

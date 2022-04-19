@@ -4,5 +4,8 @@ module com.example.centrocomercialgui {
 
 
     opens com.example.centrocomercialgui to javafx.fxml;
-    exports com.example.centrocomercialgui;
+    exports com.example.centrocomercialgui.model;
+    opens com.example.centrocomercialgui.model to javafx.fxml;
+    exports com.example.centrocomercialgui.controller;
+    opens com.example.centrocomercialgui.controller to javafx.fxml;
 }

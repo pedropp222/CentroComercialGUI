@@ -3,27 +3,36 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.centrocomercialgui.CentroController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.centrocomercialgui.controller.CentroController">
    <top>
       <VBox prefHeight="72.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <MenuBar>
+            <MenuBar stylesheets="@../../../css/style.css">
               <menus>
                 <Menu mnemonicParsing="false" text="Ficheiro">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Novo Centro" />
+                    <MenuItem mnemonicParsing="false" onAction="#novoCentroAction" text="Novo Centro" />
                         <MenuItem mnemonicParsing="false" onAction="#abrirCentroAction" text="Abrir Centro..." />
-                        <MenuItem mnemonicParsing="false" text="Gravar..." />
+                        <MenuItem fx:id="saveItem" disable="true" mnemonicParsing="false" onAction="#saveAction" text="Gravar..." />
+                        <MenuItem fx:id="saveAsItem" disable="true" mnemonicParsing="false" onAction="#saveAsAction" text="Gravar como..." />
+                        <MenuItem fx:id="fecharItem" disable="true" mnemonicParsing="false" onAction="#closeAction" text="Fechar" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#sairAction" text="Sair" />
                   </items>
@@ -38,36 +47,89 @@
                   <Insets left="20.0" top="5.0" />
                </VBox.margin>
             </Label>
+            <HBox fx:id="buttonBox" disable="true" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#novaLojaAction" text="Nova Loja">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Editar Propriedades das Lojas">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </HBox>
          </children>
       </VBox>
    </top>
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <StackPane fx:id="treeStack" prefHeight="328.0" prefWidth="300.0" />
-            <VBox fx:id="lojaBox" disable="true" prefHeight="328.0" prefWidth="277.0">
-               <children>
-                  <Label fx:id="txtLojaPropriedades" text="Propriedades:">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                  </Label>
-                  <Button alignment="CENTER" mnemonicParsing="false" prefWidth="120.0" text="Editar Loja">
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="5.0" top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button alignment="CENTER" layoutX="10.0" layoutY="29.0" mnemonicParsing="false" prefWidth="120.0" text="Apagar Loja">
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="5.0" top="10.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </VBox>
-         </children>
-      </HBox>
+      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Listagem de Lojas">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+               </content>
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <StackPane fx:id="treeStack" prefHeight="328.0" prefWidth="300.0">
+                           <children>
+                              <ListView fx:id="lojaList" prefHeight="200.0" prefWidth="200.0" />
+                           </children></StackPane>
+                        <VBox fx:id="lojaBox" disable="true" prefHeight="328.0" prefWidth="277.0" GridPane.columnIndex="1">
+                           <children>
+                              <Label fx:id="txtLojaPropriedades" text="Propriedades:">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#editarLojaAction" prefWidth="150.0" text="Editar Loja">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="5.0" top="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button alignment="CENTER" layoutX="10.0" layoutY="29.0" mnemonicParsing="false" onAction="#apagarLojaAction" prefWidth="150.0" text="Apagar Loja">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="5.0" top="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </GridPane>
+               </content>
+          </Tab>
+          <Tab text="Untitled Tab 2">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </center>
 </BorderPane>

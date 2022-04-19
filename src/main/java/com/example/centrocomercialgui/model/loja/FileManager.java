@@ -90,7 +90,7 @@ public class FileManager
                     else
                     {
                         LojaQuiosque l = new LojaQuiosque(Integer.parseInt(tokens[2]),tokens[4], Integer.parseInt(tokens[6]),
-                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]));
+                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]),TipoLoja.QUIOSQUE);
 
                         centro.adicionarLoja(l);
                     }
@@ -104,7 +104,7 @@ public class FileManager
                     {
                         LojaRestauracao l2 = new LojaRestauracao(Integer.parseInt(tokens[2]),tokens[4], Integer.parseInt(tokens[6]),
                                 Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10])
-                                , Integer.parseInt(tokens[12]), Float.parseFloat(tokens[14]));
+                                , Integer.parseInt(tokens[12]), Float.parseFloat(tokens[14]),TipoLoja.RESTAURANTE);
 
                         centro.adicionarLoja(l2);
                     }
@@ -117,7 +117,7 @@ public class FileManager
                     else
                     {
                         AncoraExterna a1 = new AncoraExterna(Integer.parseInt(tokens[2]),tokens[4], Integer.parseInt(tokens[6]),
-                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]), Float.parseFloat(tokens[12]));
+                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]), Float.parseFloat(tokens[12]),TipoLoja.ANCORA_EXTERNA);
 
                         centro.adicionarLoja(a1);
                     }
@@ -130,7 +130,7 @@ public class FileManager
                     else
                     {
                         AncoraPropria a2 = new AncoraPropria(Integer.parseInt(tokens[2]),tokens[4], Integer.parseInt(tokens[6]),
-                                Float.parseFloat(tokens[8]), Float.parseFloat(tokens[10]));
+                                Float.parseFloat(tokens[8]), Float.parseFloat(tokens[10]),TipoLoja.ANCORA_PROPRIA);
                         centro.adicionarLoja(a2);
                     }
                     break;

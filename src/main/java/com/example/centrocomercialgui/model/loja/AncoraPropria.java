@@ -6,6 +6,7 @@ package com.example.centrocomercialgui.model.loja;
  */
 public class AncoraPropria extends Loja implements ComSeguranca
 {
+    @UILojaElement
     private float custoSeguranca;
 
     /**
@@ -14,6 +15,7 @@ public class AncoraPropria extends Loja implements ComSeguranca
     public AncoraPropria()
     {
         super();
+        setTipoLoja(TipoLoja.ANCORA_PROPRIA);
     }
 
     /**
@@ -27,6 +29,7 @@ public class AncoraPropria extends Loja implements ComSeguranca
     {
         super(nome, area, receitas);
         this.custoSeguranca = custoSeguranca;
+        setTipoLoja(TipoLoja.ANCORA_PROPRIA);
     }
 
     /**
@@ -37,9 +40,9 @@ public class AncoraPropria extends Loja implements ComSeguranca
      * @param receitas a receita da Âncora Própria
      * @param custoSeguranca o custo de segunrança da Âncora Própria
      */
-    public AncoraPropria(int id, String nome, int area, float receitas, float custoSeguranca)
+    public AncoraPropria(int id, String nome, int area, float receitas, float custoSeguranca, TipoLoja tipoLoja)
     {
-        super(id, nome, area, receitas);
+        super(id, nome, area, receitas, tipoLoja);
         this.custoSeguranca = custoSeguranca;
     }
 

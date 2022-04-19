@@ -1,5 +1,10 @@
 package com.example.centrocomercialgui.model.loja;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * Classe abstrata que representa uma loja. Contém todas as funcionalidades base de uma loja como o id, nome, area
  * receitas e variaveis de classe que controlam a classificação das áreas das lojas e a contagem global de lojas
@@ -8,8 +13,12 @@ package com.example.centrocomercialgui.model.loja;
 public abstract class Loja implements Comparable<Loja>
 {
     private int id = 0;
+
+    @UILojaElement
     private String nome;
+    @UILojaElement
     private int area;
+    @UILojaElement
     private float receitas;
     private static int totalLojas = 0;
 
@@ -17,6 +26,8 @@ public abstract class Loja implements Comparable<Loja>
     private static int areaGrande = 100;
 
     private final String DEFAULT_NAME = "sem nome";
+
+    private TipoLoja tipoLoja;
 
     /**
      * Construtor sem parâmetros de uma Loja
@@ -26,6 +37,7 @@ public abstract class Loja implements Comparable<Loja>
         this.id = totalLojas;
         this.nome = DEFAULT_NAME;
         totalLojas++;
+        tipoLoja = TipoLoja.OUTRO;
     }
 
     /**
@@ -49,7 +61,7 @@ public abstract class Loja implements Comparable<Loja>
      * @param area a área da Loja
      * @param receitas as receitas da Loja
      */
-    public Loja(int id, String nome, int area, float receitas )
+    public Loja(int id, String nome, int area, float receitas, TipoLoja tipoLoja)
     {
         this.id = id;
         this.nome = nome;
@@ -57,6 +69,13 @@ public abstract class Loja implements Comparable<Loja>
         this.receitas = receitas;
         totalLojas = Math.max(totalLojas,id);
         totalLojas++;
+        this.tipoLoja = tipoLoja;
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface UILojaElement
+    {
     }
 
     /**
@@ -213,6 +232,16 @@ public abstract class Loja implements Comparable<Loja>
         return LojaArea.MEDIO;
     }
 
+    public TipoLoja getTipoLoja()
+    {
+        return tipoLoja;
+    }
+
+    public void setTipoLoja(TipoLoja tipoLoja)
+    {
+        this.tipoLoja = tipoLoja;
+    }
+
     /**
      * Compara esta Loja com outra, usando o nome como método de comparação. Usado por sistemas de sort.
      * @param o a Loja a comparar
@@ -231,7 +260,7 @@ public abstract class Loja implements Comparable<Loja>
     @Override
     public String toString()
     {
-        return String.format("ID: %d\n Nome: %s\n Área: %d\n Classificação: %s\n Receitas: %.2f€\n",id, nome,area, getClassificacao(), receitas);
+        return String.format("ID: %d\n Tipo de Loja: %s\nNome: %s\n Área: %d\n Classificação: %s\n Receitas: %.2f€\n",id, tipoLoja, nome,area, getClassificacao(), receitas);
     }
 
     /**
@@ -251,5 +280,4 @@ public abstract class Loja implements Comparable<Loja>
         if (loja.receitas != receitas) return false;
         return nome.equals(loja.nome);
     }
-
 }

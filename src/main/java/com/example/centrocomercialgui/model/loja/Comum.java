@@ -37,9 +37,9 @@ public abstract class Comum extends ComFuncionarios
      * @param receitas as receitas
      * @param numeroFuncionarios o número de funcionários
      */
-    public Comum(int id, String nome, int area, float receitas, int numeroFuncionarios)
+    public Comum(int id, String nome, int area, float receitas, int numeroFuncionarios, TipoLoja tipoLoja)
     {
-        super(id, nome, area, receitas, numeroFuncionarios);
+        super(id, nome, area, receitas, numeroFuncionarios, tipoLoja);
         contagem++;
     }
 

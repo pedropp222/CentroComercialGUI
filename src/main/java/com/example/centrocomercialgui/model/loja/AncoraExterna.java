@@ -14,6 +14,7 @@ public class AncoraExterna extends ComFuncionarios implements ComSeguranca
     /**
      * O custo segurança desta AncoraExterna
      */
+    @UILojaElement
     private float custoSeguranca;
 
     /**
@@ -22,6 +23,7 @@ public class AncoraExterna extends ComFuncionarios implements ComSeguranca
     public AncoraExterna()
     {
         super();
+        setTipoLoja(TipoLoja.ANCORA_EXTERNA);
     }
 
     /**
@@ -36,6 +38,7 @@ public class AncoraExterna extends ComFuncionarios implements ComSeguranca
     {
         super(nome, area, receitas, numeroFuncionarios);
         this.custoSeguranca = custoSeguranca;
+        setTipoLoja(TipoLoja.ANCORA_EXTERNA);
     }
 
     /**
@@ -47,9 +50,9 @@ public class AncoraExterna extends ComFuncionarios implements ComSeguranca
      * @param numeroFuncionarios o número de funcionários da Âncora Externa
      * @param custoSeguranca o custo da segurança da Âncora Externa
      */
-    public AncoraExterna(int id, String nome, int area, float receitas, int numeroFuncionarios, float custoSeguranca)
+    public AncoraExterna(int id, String nome, int area, float receitas, int numeroFuncionarios, float custoSeguranca, TipoLoja tipoLoja)
     {
-        super(id, nome, area, receitas, numeroFuncionarios);
+        super(id, nome, area, receitas, numeroFuncionarios, tipoLoja);
         this.custoSeguranca = custoSeguranca;
     }
 
