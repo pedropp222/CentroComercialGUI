@@ -35,12 +35,13 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <Menu fx:id="importItem" disable="true" mnemonicParsing="false" text="Importar...">
                           <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" onAction="#importPropertiesAction" text="Propriedades das Lojas" />
                           </items>
                         </Menu>
                         <Menu fx:id="exportItem" disable="true" mnemonicParsing="false" text="Exportar...">
                            <items>
                               <MenuItem mnemonicParsing="false" onAction="#openExportLojasWindow" text="Lojas" />
+                              <MenuItem mnemonicParsing="false" onAction="#exportPropertiesAction" text="Propriedades das Lojas" />
                            </items>
                         </Menu>
                         <SeparatorMenuItem mnemonicParsing="false" />

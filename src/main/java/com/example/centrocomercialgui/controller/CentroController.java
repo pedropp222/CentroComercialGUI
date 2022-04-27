@@ -110,10 +110,10 @@ public class CentroController implements Initializable
         if (dirtyFile)
         {
             Optional<ButtonType> result = confirmationMessage("Novo Centro Comercial", "Quer guardar o ficheiro atual?");
-            if (result.get() == ButtonType.YES)
+            if (result.isPresent() && result.get() == ButtonType.YES)
             {
                 saveAction(null);
-            } else if (result.get() == ButtonType.CANCEL)
+            } else if (result.isPresent() && result.get() == ButtonType.CANCEL)
             {
                 return;
             }
@@ -472,6 +472,54 @@ public class CentroController implements Initializable
             //alert for error message
             GUIUtils.errorMessage("Erro ao abrir janela", "Erro: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public void exportPropertiesAction(ActionEvent actionEvent)
+    {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Guardar Propriedades das Lojas Como...");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiro de texto","*"+FileManager.TXT_FORMAT));
+
+
+        File f = fc.showSaveDialog(txtCentroName.getScene().getWindow());
+
+        if (f!=null)
+        {
+            try
+            {
+                FileManager.saveLojaProperties(f.getAbsolutePath());
+                GUIUtils.informationMessage("Concluido","Exportacao concluida");
+            }
+            catch (IOException e)
+            {
+                GUIUtils.errorMessage("Erro.","Nao foi possivel gravar o ficheiro. "+e.getMessage());
+            }
+        }
+    }
+
+    public void importPropertiesAction(ActionEvent actionEvent)
+    {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Carregar Propriedades das Lojas");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiro de texto","*"+FileManager.TXT_FORMAT));
+
+
+        File f = fc.showOpenDialog(txtCentroName.getScene().getWindow());
+
+        if (f!=null)
+        {
+            try
+            {
+                FileManager.loadLojaProperties(f.getAbsolutePath());
+                dirtyFile = true;
+                updateWindowTitle();
+                GUIUtils.informationMessage("Concluido","Importacao concluida");
+            }
+            catch (FileNotFoundException e)
+            {
+                GUIUtils.errorMessage("Erro.","Nao foi possivel carregar o ficheiro. "+e.getMessage());
+            }
         }
     }
 }
