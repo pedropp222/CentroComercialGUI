@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.centrocomercialgui.controller.CentroController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.centrocomercialgui.controller.CentroController">
    <top>
       <VBox prefHeight="72.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -54,7 +54,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Button>
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Editar Propriedades das Lojas">
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editarPropriedadesLojaAction" text="Editar Propriedades das Lojas">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -124,7 +124,7 @@
                   </GridPane>
                </content>
           </Tab>
-          <Tab text="Untitled Tab 2">
+          <Tab text="Relatorios">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>

@@ -9,7 +9,9 @@ public class AncoraExterna extends ComFuncionarios implements ComSeguranca
     /**
      *Esta variável de Classe "rendaFixa" define qual vai ser o grau com o qual vai ser calculada a renda.
      */
-    private static float rendaFixa = 2000f;
+    private static final float DEFAULT_RENDA = 2000f;
+
+    private static float rendaFixa = DEFAULT_RENDA;
 
     /**
      * O custo segurança desta AncoraExterna
@@ -135,5 +137,10 @@ public class AncoraExterna extends ComFuncionarios implements ComSeguranca
     public String toString()
     {
         return String.format("%s Custo Segurança: %.2f€\n", super.toString(), calcularCustoSeguranca());
+    }
+
+    public static void reset()
+    {
+        rendaFixa = DEFAULT_RENDA;
     }
 }

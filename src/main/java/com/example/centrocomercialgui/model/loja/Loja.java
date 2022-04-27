@@ -22,8 +22,11 @@ public abstract class Loja implements Comparable<Loja>
     private float receitas;
     private static int totalLojas = 0;
 
-    private static int areaPequeno = 20;
-    private static int areaGrande = 100;
+    private static final int DEFAULT_AREA_PEQUENO = 20;
+    private static final int DEFAULT_AREA_GRANDE = 100;
+
+    private static int areaPequeno = DEFAULT_AREA_PEQUENO;
+    private static int areaGrande = DEFAULT_AREA_GRANDE;
 
     private final String DEFAULT_NAME = "sem nome";
 
@@ -279,5 +282,11 @@ public abstract class Loja implements Comparable<Loja>
         if (area != loja.area) return false;
         if (loja.receitas != receitas) return false;
         return nome.equals(loja.nome);
+    }
+
+    public static void reset()
+    {
+        areaGrande = DEFAULT_AREA_GRANDE;
+        areaPequeno = DEFAULT_AREA_PEQUENO;
     }
 }

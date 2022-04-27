@@ -1,9 +1,7 @@
 package com.example.centrocomercialgui.controller;
 
 import com.example.centrocomercialgui.model.CentroApplication;
-import com.example.centrocomercialgui.model.loja.CentroComercial;
-import com.example.centrocomercialgui.model.loja.FileManager;
-import com.example.centrocomercialgui.model.loja.Loja;
+import com.example.centrocomercialgui.model.loja.*;
 import com.example.centrocomercialgui.model.utils.GUIUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -100,8 +98,7 @@ public class CentroController implements Initializable
             if (result.get() == ButtonType.YES)
             {
                 saveAction(null);
-            }
-            else if (result.get() == ButtonType.CANCEL)
+            } else if (result.get() == ButtonType.CANCEL)
             {
                 return;
             }
@@ -176,7 +173,7 @@ public class CentroController implements Initializable
     {
         try
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/novaLoja.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/windowLoja.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -241,8 +238,7 @@ public class CentroController implements Initializable
             if (result.get() == ButtonType.YES)
             {
                 saveAction(null);
-            }
-            else if (result.get() == ButtonType.CANCEL)
+            } else if (result.get() == ButtonType.CANCEL)
             {
                 return;
             }
@@ -250,6 +246,7 @@ public class CentroController implements Initializable
 
         currentCentro = null;
         currentFile = null;
+        dirtyFile = false;
 
         buttonBox.setDisable(true);
         saveItem.setDisable(true);
@@ -257,8 +254,19 @@ public class CentroController implements Initializable
         fecharItem.setDisable(true);
         tabPane.setDisable(true);
 
+        resetLojaValores();
+
+
         updateList();
         updateWindowTitle();
+    }
+
+    private void resetLojaValores()
+    {
+        AncoraExterna.reset();
+        Loja.reset();
+        LojaQuiosque.reset();
+        LojaRestauracao.reset();
     }
 
     private void openCentroComercial(CentroComercial centro, File file)
@@ -332,7 +340,7 @@ public class CentroController implements Initializable
     {
         try
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/novaLoja.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/windowLoja.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -371,6 +379,34 @@ public class CentroController implements Initializable
             alert.setTitle("Loja editada");
             alert.setHeaderText("Loja editada com sucesso");
             alert.showAndWait();
+        }
+    }
+
+    public void editPropriedadesFinished()
+    {
+        dirtyFile = true;
+        updateWindowTitle();
+
+    }
+
+    public void editarPropriedadesLojaAction(ActionEvent actionEvent)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/windowPropriedadesLojas.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Editar Propriedades Globais das Lojas");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            loader.<LojaPropriedadesController>getController().initialize(this);
+
+            stage.showAndWait();
+        } catch (IOException e)
+        {
+            GUIUtils.errorMessage("Erro ao abrir novo centro comercial", e.getMessage());
         }
     }
 }

@@ -5,7 +5,9 @@ package com.example.centrocomercialgui.model.loja;
  */
 public class LojaQuiosque extends Comum
 {
-    private static float renda = 250f;
+    private static final float DEFAULT_RENDA = 250f;
+
+    private static float renda = DEFAULT_RENDA;
 
     /**
      * Construtor sem parâmetros do Quiosque
@@ -89,5 +91,10 @@ public class LojaQuiosque extends Comum
     public String toString()
     {
         return String.format("%s Custo Segurança: %.2f€\n", super.toString(), renda);
+    }
+
+    public static void reset()
+    {
+        renda = DEFAULT_RENDA;
     }
 }

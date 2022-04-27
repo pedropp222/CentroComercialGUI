@@ -7,8 +7,11 @@ package com.example.centrocomercialgui.model.loja;
  */
 public class LojaRestauracao extends Comum implements ComSeguranca
 {
-    private static float rendaFixa = 700f;
-    private static float valorPorMesa = 5f;
+    private static final float DEFAULT_RENDA = 700f;
+    private static final float DEFAULT_VALOR = 5f;
+
+    private static float rendaFixa = DEFAULT_RENDA;
+    private static float valorPorMesa = DEFAULT_VALOR;
 
     @UILojaElement
     private int numMesas;
@@ -175,5 +178,11 @@ public class LojaRestauracao extends Comum implements ComSeguranca
 
         if (numMesas != obj.numMesas) return false;
         return obj.custoManutencao == custoManutencao;
+    }
+
+    public static void reset()
+    {
+        rendaFixa = DEFAULT_RENDA;
+        valorPorMesa = DEFAULT_VALOR;
     }
 }
