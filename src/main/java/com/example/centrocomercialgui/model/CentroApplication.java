@@ -21,8 +21,6 @@ public class CentroApplication extends Application
         stage.setTitle("Centro Comercial Manager");
         stage.setScene(scene);
         stage.show();
-
-
     }
 
     public static Stage getMainStage()

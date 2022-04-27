@@ -1,14 +1,13 @@
 package com.example.centrocomercialgui.model.loja;
 
 import com.example.centrocomercialgui.model.comparators.SortId;
+import javafx.util.Pair;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
-import java.util.Formatter;
-import java.util.Locale;
-import java.util.Scanner;
+import java.nio.file.Path;
+import java.text.Normalizer;
+import java.util.*;
 
 /**
  * Classe que gere o carregamento e gravação de ficheiros. Gravam e carregam o estado de objetos do tipo
@@ -40,6 +39,8 @@ public class FileManager
     private static final String RENDARES = "RendaFixaRestaurante";
     private static final String VALORMRES = "ValorMesaRestaurante";
 
+    public static final String TXT_FORMAT = ".txt";
+    public static final String CENTRO_FORMAT = ".ccf";
 
     /**
      * Carrega o conteúdo de um ficheiro para um objeto CentroComercial. Caso o ficheiro não exista,
@@ -69,145 +70,192 @@ public class FileManager
             switch (tokens[0])
             {
                 //parse CentroComercial
-                case CENTRO:
+                case CENTRO -> {
                     if (tokens.length != CENTRO_PARAM)
                     {
-                        System.out.println(CENTRO+" nao tem parâmetros corretos");
-                    }
-                    else
+                        System.out.println(CENTRO + " nao tem parâmetros corretos");
+                    } else
                     {
                         centro.setNome(tokens[2]);
                         centro.setMorada(tokens[4]);
                     }
-                    break;
+                }
 
-                //parse dos 4 tipos de lojas
-                case QUIOSQUE:
-                    if (tokens.length != QUIOSQUE_PARAM)
-                    {
-                        System.out.println("tipo "+QUIOSQUE+" nao tem parâmetros corretos");
-                    }
-                    else
-                    {
-                        LojaQuiosque l = new LojaQuiosque(Integer.parseInt(tokens[2]),tokens[4], Integer.parseInt(tokens[6]),
-                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]),TipoLoja.QUIOSQUE);
-
-                        centro.adicionarLoja(l);
-                    }
-                    break;
-                case RESTAURANTE:
-                    if (tokens.length != RESTAURACAO_PARAM)
-                    {
-                        System.out.println("tipo "+RESTAURANTE+" nao tem parâmetros corretos");
-                    }
-                    else
-                    {
-                        LojaRestauracao l2 = new LojaRestauracao(Integer.parseInt(tokens[2]),tokens[4], Integer.parseInt(tokens[6]),
-                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10])
-                                , Integer.parseInt(tokens[12]), Float.parseFloat(tokens[14]),TipoLoja.RESTAURANTE);
-
-                        centro.adicionarLoja(l2);
-                    }
-                    break;
-                case ANCORAEX:
-                    if (tokens.length != ANCORAEX_PARAM)
-                    {
-                        System.out.println("tipo "+ANCORAEX+" nao tem parâmetros corretos");
-                    }
-                    else
-                    {
-                        AncoraExterna a1 = new AncoraExterna(Integer.parseInt(tokens[2]),tokens[4], Integer.parseInt(tokens[6]),
-                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]), Float.parseFloat(tokens[12]),TipoLoja.ANCORA_EXTERNA);
-
-                        centro.adicionarLoja(a1);
-                    }
-                    break;
-                case ANCORAPRO:
-                    if (tokens.length != ANCORAPRO_PARAM)
-                    {
-                        System.out.println("tipo "+ANCORAPRO+" nao tem parâmetros corretos");
-                    }
-                    else
-                    {
-                        AncoraPropria a2 = new AncoraPropria(Integer.parseInt(tokens[2]),tokens[4], Integer.parseInt(tokens[6]),
-                                Float.parseFloat(tokens[8]), Float.parseFloat(tokens[10]),TipoLoja.ANCORA_PROPRIA);
-                        centro.adicionarLoja(a2);
-                    }
-                    break;
+                case QUIOSQUE, RESTAURANTE, ANCORAEX, ANCORAPRO -> {
+                    //parse dos 4 tipos de lojas
+                    Loja l = parseLoja(tokens[0],tokens,true);
+                    centro.adicionarLoja(l);
+                }
 
                 //parse dos valores static
-                case LOJAAP:
+                case LOJAAP -> {
                     if (tokens.length != STATICVARS_PARAM)
                     {
                         System.out.println("valor estatico incorreto");
-                    }
-                    else
+                    } else
                     {
                         Loja.setAreaPequeno(Integer.parseInt(tokens[1]));
                     }
-                    break;
-                case LOJAAG:
+                }
+                case LOJAAG -> {
                     if (tokens.length != STATICVARS_PARAM)
                     {
                         System.out.println("valor estatico incorreto");
-                    }
-                    else
+                    } else
                     {
                         Loja.setAreaGrande(Integer.parseInt(tokens[1]));
                     }
-                    break;
-                case RENDAAE:
+                }
+                case RENDAAE -> {
                     if (tokens.length != STATICVARS_PARAM)
                     {
                         System.out.println("valor estatico incorreto");
-                    }
-                    else
+                    } else
                     {
                         AncoraExterna.setRendaFixa(Float.parseFloat(tokens[1]));
                     }
-                    break;
-                case RENDAQ:
+                }
+                case RENDAQ -> {
                     if (tokens.length != STATICVARS_PARAM)
                     {
                         System.out.println("valor estatico incorreto");
-                    }
-                    else
+                    } else
                     {
                         LojaQuiosque.setRenda(Float.parseFloat(tokens[1]));
                     }
-                    break;
-                case RENDARES:
+                }
+                case RENDARES -> {
                     if (tokens.length != STATICVARS_PARAM)
                     {
                         System.out.println("valor estatico incorreto");
-                    }
-                    else
+                    } else
                     {
                         LojaRestauracao.setRendaFixa(Float.parseFloat(tokens[1]));
                     }
-                    break;
-                case VALORMRES:
+                }
+                case VALORMRES -> {
                     if (tokens.length != STATICVARS_PARAM)
                     {
                         System.out.println("valor estatico incorreto");
-                    }
-                    else
+                    } else
                     {
                         LojaRestauracao.setValorPorMesa(Float.parseFloat(tokens[1]));
                     }
-                    break;
+                }
                 //caso default
-                default:
-                    if (!tokens[0].startsWith("<"))
+                default -> {
+                    if (!tokens[0].startsWith("<") && tokens[0].length() > 0)
                     {
                         System.out.println("Tipo invalido " + tokens[0]);
                     }
-                    break;
+                }
             }
         }
 
         sc.close();
         return centro;
+    }
+
+    private static Loja parseLoja(String input, String[] tokens, boolean getId)
+    {
+        switch (input)
+        {
+            case QUIOSQUE:
+                if (tokens.length != QUIOSQUE_PARAM)
+                {
+                    System.out.println("tipo " + QUIOSQUE + " nao tem parâmetros corretos");
+                } else
+                {
+                    if (getId)
+                    {
+                        return new LojaQuiosque(Integer.parseInt(tokens[2]), tokens[4], Integer.parseInt(tokens[6]),
+                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]), TipoLoja.QUIOSQUE);
+                    }
+                    else
+                    {
+                        return new LojaQuiosque(tokens[4], Integer.parseInt(tokens[6]),
+                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]));
+                    }
+                }
+                break;
+            case RESTAURANTE:
+                if (tokens.length != RESTAURACAO_PARAM)
+                {
+                    System.out.println("tipo " + RESTAURANTE + " nao tem parâmetros corretos");
+                } else
+                {
+                    if (getId)
+                    {
+                        return new LojaRestauracao(Integer.parseInt(tokens[2]), tokens[4], Integer.parseInt(tokens[6]),
+                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10])
+                                , Integer.parseInt(tokens[12]), Float.parseFloat(tokens[14]), TipoLoja.RESTAURANTE);
+                    }
+                    else
+                    {
+                        return new LojaRestauracao(tokens[4], Integer.parseInt(tokens[6]),
+                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10])
+                                , Integer.parseInt(tokens[12]), Float.parseFloat(tokens[14]));
+                    }
+                }
+                break;
+            case ANCORAEX:
+                if (tokens.length != ANCORAEX_PARAM)
+                {
+                    System.out.println("tipo " + ANCORAEX + " nao tem parâmetros corretos");
+                } else
+                {
+                    if (getId)
+                    {
+                        return new AncoraExterna(Integer.parseInt(tokens[2]), tokens[4], Integer.parseInt(tokens[6]),
+                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]), Float.parseFloat(tokens[12]), TipoLoja.ANCORA_EXTERNA);
+                    }
+                    else
+                    {
+                        return new AncoraExterna(tokens[4], Integer.parseInt(tokens[6]),
+                                Float.parseFloat(tokens[8]), Integer.parseInt(tokens[10]), Float.parseFloat(tokens[12]));
+                    }
+                }
+                break;
+            case ANCORAPRO:
+                if (tokens.length != ANCORAPRO_PARAM)
+                {
+                    System.out.println("tipo " + ANCORAPRO + " nao tem parâmetros corretos");
+                } else
+                {
+                    if (getId)
+                    {
+                        return new AncoraPropria(Integer.parseInt(tokens[2]), tokens[4], Integer.parseInt(tokens[6]),
+                                Float.parseFloat(tokens[8]), Float.parseFloat(tokens[10]), TipoLoja.ANCORA_PROPRIA);
+                    }
+                    else
+                    {
+                        return new AncoraPropria(tokens[4], Integer.parseInt(tokens[6]),
+                                Float.parseFloat(tokens[8]), Float.parseFloat(tokens[10]));
+                    }
+                }
+                break;
+        }
+
+        return null;
+    }
+
+    public static List<Loja> loadLojas(String filename) throws FileNotFoundException
+    {
+        List<Loja> lojas = new ArrayList<>();
+
+        Scanner sc = new Scanner(new File(filename));
+
+        while (sc.hasNextLine())
+        {
+            String[] tokens = sc.nextLine().split("\\W*;\\W*");
+
+            if (tokens.length > 1)
+            {
+                lojas.add(parseLoja(tokens[0],tokens,false));
+            }
+        }
+
+        return lojas;
     }
 
     /**
@@ -264,6 +312,117 @@ public class FileManager
         System.out.println("Ficheiro "+nome+" guardado.");
     }
 
+    public static void saveLojasBinary(File folder, String filename, CentroComercial centro, boolean saveExt, boolean savePro, boolean saveQui, boolean saveRes) throws IOException
+    {
+        Path filePath = Path.of(folder.getAbsolutePath(),filename);
+
+        List<Pair<TipoLoja,List<Loja>>> listLojas = new ArrayList<>();
+
+        if (saveExt)
+        {
+            listLojas.add(new Pair<>(TipoLoja.ANCORA_EXTERNA,centro.getLojasTipo(TipoLoja.ANCORA_EXTERNA)));
+        }
+        if (savePro)
+        {
+            listLojas.add(new Pair<>(TipoLoja.ANCORA_PROPRIA,centro.getLojasTipo(TipoLoja.ANCORA_PROPRIA)));
+        }
+        if (saveQui)
+        {
+            listLojas.add(new Pair<>(TipoLoja.QUIOSQUE,centro.getLojasTipo(TipoLoja.QUIOSQUE)));
+
+        }
+        if (saveRes)
+        {
+            listLojas.add(new Pair<>(TipoLoja.RESTAURANTE,centro.getLojasTipo(TipoLoja.RESTAURANTE)));
+        }
+
+        for(Pair<TipoLoja,List<Loja>> p : listLojas)
+        {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath+p.getKey().name()+CENTRO_FORMAT));
+            oos.writeObject(p.getValue());
+            oos.close();
+        }
+    }
+
+    public static void saveLojas(File folder, String filename, CentroComercial centro, boolean saveExt, boolean savePro, boolean saveQui, boolean saveRes) throws IOException
+    {
+        Path filePath = Path.of(folder.getAbsolutePath(),filename);
+
+        List<Pair<Class<? extends Loja>, Formatter>> fileList = new ArrayList<>();
+
+        if (saveExt)
+        {
+            fileList.add(new Pair<>(AncoraExterna.class,new Formatter(filePath+"Ext.txt")));
+        }
+        if (savePro)
+        {
+            fileList.add(new Pair<>(AncoraPropria.class,new Formatter(filePath+"Pro.txt")));
+        }
+        if (saveQui)
+        {
+            fileList.add(new Pair<>(LojaQuiosque.class,new Formatter(filePath+"Qui.txt")));
+        }
+        if (saveRes)
+        {
+            fileList.add(new Pair<>(LojaRestauracao.class,new Formatter(filePath+"Res.txt")));
+        }
+
+
+        //Save do estado das lojas
+        int maxName = getNomeMaior(centro);
+        for(int i = 0 ; i < centro.getTotalLojas(); i++)
+        {
+            Loja j = centro.obterLoja(i);
+            if (j instanceof LojaQuiosque && containsClass(fileList,j.getClass()))
+            {
+                getFormatter(fileList,j.getClass()).format((i>0?"\n":"")+QUIOSQUE+"    ; ID ; %4d ; NOME ; %"+maxName+"s ; AREA ; %4d ; RECEITAS ; %10.2f ; NUMERO FUNCIONARIOS ; %3d",j.getId(), j.getNome(), j.getArea(), j.getReceitas(), ((LojaQuiosque) j).getNumeroFuncionarios());
+            }
+            else if (j instanceof LojaRestauracao && containsClass(fileList,j.getClass()))
+            {
+                getFormatter(fileList,j.getClass()).format((i>0?"\n":"")+RESTAURANTE+" ; ID ; %4d ; NOME ; %"+maxName+"s ; AREA ; %4d ; RECEITAS ; %10.2f ; NUMERO FUNCIONARIOS ; %3d ; NUMERO MESAS ; %2d ; CUSTO MANUTENCAO ; %5.2f",j.getId(),j.getNome(), j.getArea(), j.getReceitas(), ((LojaRestauracao) j).getNumeroFuncionarios(), ((LojaRestauracao) j).getNumMesas(), ((LojaRestauracao) j).getCustoManutencao());
+            }
+            else if (j instanceof AncoraExterna && containsClass(fileList,j.getClass()))
+            {
+                getFormatter(fileList,j.getClass()).format((i>0?"\n":"")+ANCORAEX+"   ; ID ; %4d ; NOME ; %"+maxName+"s ; AREA ; %4d ; RECEITAS ; %10.2f ; NUMERO FUNCIONARIOS ; %3d ; CUSTO SEGURANCA ; %5.2f",j.getId(),j.getNome(), j.getArea(), j.getReceitas(), ((AncoraExterna) j).getNumeroFuncionarios(), ((AncoraExterna) j).calcularCustoSeguranca());
+            }
+            else if (j instanceof AncoraPropria && containsClass(fileList,j.getClass()))
+            {
+                getFormatter(fileList,j.getClass()).format((i>0?"\n":"")+ANCORAPRO+"   ; ID ; %4d ; NOME ; %"+maxName+"s ; AREA ; %4d ; RECEITAS ; %10.2f ; CUSTO SEGURANCA ; %5.2f",j.getId(),j.getNome(),j.getArea(),j.getReceitas(),((AncoraPropria) j).calcularCustoSeguranca());
+            }
+        }
+
+        for(Pair<Class<? extends Loja>, Formatter> pair : fileList)
+        {
+            pair.getValue().close();
+        }
+    }
+
+    private static Formatter getFormatter(List<Pair<Class<? extends Loja>, Formatter>> fileList, Class<? extends Loja> clazz)
+    {
+        for(Pair<Class<? extends Loja>, Formatter> p : fileList)
+        {
+            if (p.getKey().equals(clazz))
+            {
+                return p.getValue();
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean containsClass(List<Pair<Class<? extends Loja>, Formatter>> fileList, Class<? extends Loja> clazz)
+    {
+        for(Pair<Class<? extends Loja>, Formatter> p : fileList)
+        {
+            if (p.getKey().equals(clazz))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Obtem o tamanho do maior nome de uma loja de um centro comercial
      * @param c o centro comercial
@@ -277,5 +436,53 @@ public class FileManager
             max = Math.max(max,c.obterLoja(i).getNome().length());
         }
         return max;
+    }
+
+    public static void saveBinaryFile(File nome, CentroComercial centro)
+    {
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nome)))
+        {
+            oos.writeObject(centro);
+
+            oos.writeInt(Loja.getAreaPequeno());
+            oos.writeInt(Loja.getAreaGrande());
+            oos.writeInt(Loja.getTotalLojas());
+            oos.writeInt(Comum.getContagem());
+
+            oos.writeFloat(AncoraExterna.getRendaFixa());
+            oos.writeFloat(LojaQuiosque.getRenda());
+            oos.writeFloat(LojaRestauracao.getRendaFixa());
+            oos.writeFloat(LojaRestauracao.getValorPorMesa());
+        }
+        catch (IOException e)
+        {
+            System.out.println("Erro ao gravar ficheiro binario: "+e.getMessage());
+        }
+    }
+
+    public static CentroComercial openBinaryFile(File f)
+    {
+        CentroComercial c = null;
+
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f)))
+        {
+            c = (CentroComercial) ois.readObject();
+
+            Loja.setAreaPequeno(ois.readInt());
+            Loja.setAreaGrande(ois.readInt());
+            Loja.setTotalLojas(ois.readInt());
+            Comum.setContagem(ois.readInt());
+
+            AncoraExterna.setRendaFixa(ois.readFloat());
+            LojaQuiosque.setRenda(ois.readFloat());
+            LojaRestauracao.setRendaFixa(ois.readFloat());
+            LojaRestauracao.setValorPorMesa(ois.readFloat());
+        }
+        catch (IOException | ClassNotFoundException e)
+        {
+            System.out.println("Erro ao abrir ficheiro binario: "+e.getMessage());
+        }
+
+        return c;
     }
 }

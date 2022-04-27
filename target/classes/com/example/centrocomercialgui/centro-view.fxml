@@ -32,6 +32,18 @@
                         <MenuItem mnemonicParsing="false" onAction="#abrirCentroAction" text="Abrir Centro..." />
                         <MenuItem fx:id="saveItem" disable="true" mnemonicParsing="false" onAction="#saveAction" text="Gravar..." />
                         <MenuItem fx:id="saveAsItem" disable="true" mnemonicParsing="false" onAction="#saveAsAction" text="Gravar como..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <Menu fx:id="importItem" disable="true" mnemonicParsing="false" text="Importar...">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                          </items>
+                        </Menu>
+                        <Menu fx:id="exportItem" disable="true" mnemonicParsing="false" text="Exportar...">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#openExportLojasWindow" text="Lojas" />
+                           </items>
+                        </Menu>
+                        <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="fecharItem" disable="true" mnemonicParsing="false" onAction="#closeAction" text="Fechar" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#sairAction" text="Sair" />

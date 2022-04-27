@@ -1,5 +1,6 @@
 package com.example.centrocomercialgui.model.loja;
 
+import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,7 +11,7 @@ import java.lang.annotation.Target;
  * receitas e variaveis de classe que controlam a classificação das áreas das lojas e a contagem global de lojas
  * criadas.
  */
-public abstract class Loja implements Comparable<Loja>
+public abstract class Loja implements Comparable<Loja>, Serializable
 {
     private int id = 0;
 
@@ -73,6 +74,11 @@ public abstract class Loja implements Comparable<Loja>
         totalLojas = Math.max(totalLojas,id);
         totalLojas++;
         this.tipoLoja = tipoLoja;
+    }
+
+    public static void setTotalLojas(int readInt)
+    {
+        totalLojas = readInt;
     }
 
     @Retention(RetentionPolicy.RUNTIME)

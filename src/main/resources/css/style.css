@@ -142,7 +142,7 @@
 }
 
 .toggle-button:selected{
-	-fx-background-color : -darkGray;
+	-fx-background-color : #2ecc71;
 }
 
 .menu-button{

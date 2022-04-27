@@ -25,7 +25,6 @@ import java.util.*;
 
 public class CentroController implements Initializable
 {
-
     public StackPane treeStack;
     public Label txtCentroName;
     public VBox lojaBox;
@@ -36,24 +35,40 @@ public class CentroController implements Initializable
     public ListView<Loja> lojaList;
     public TabPane tabPane;
     public MenuItem fecharItem;
+    public Menu importItem;
+    public Menu exportItem;
 
     private File currentFile;
     private CentroComercial currentCentro;
-
-
     private boolean dirtyFile;
+
+    public CentroComercial getCurrentCentro()
+    {
+        return currentCentro;
+    }
 
     public void abrirCentroAction(ActionEvent actionEvent)
     {
         FileChooser fc = new FileChooser();
         fc.setTitle("Abrir Centro Comercial");
+
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiro de texto","*"+FileManager.TXT_FORMAT));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Centro Comercial","*"+FileManager.CENTRO_FORMAT));
+
         File selected = fc.showOpenDialog(CentroApplication.getMainStage());
 
         if (selected != null)
         {
             try
             {
-                openCentroComercial(FileManager.loadFile(selected.getAbsolutePath()), selected);
+                if (isBinaryFile(selected.getAbsolutePath()))
+                {
+                    openCentroComercial(FileManager.openBinaryFile(selected),selected);
+                }
+                else
+                {
+                    openCentroComercial(FileManager.loadFile(selected.getAbsolutePath()), selected);
+                }
             } catch (FileNotFoundException e)
             {
                 System.out.println("Erro a abrir loja?: " + e.getMessage());
@@ -130,7 +145,14 @@ public class CentroController implements Initializable
     {
         try
         {
-            FileManager.saveFile(currentFile.getAbsolutePath(), currentCentro);
+            if (isBinaryFile(currentFile.getAbsolutePath()))
+            {
+                FileManager.saveBinaryFile(currentFile,currentCentro);
+            }
+            else
+            {
+                FileManager.saveFile(currentFile.getAbsolutePath(), currentCentro);
+            }
             dirtyFile = false;
             updateWindowTitle();
         } catch (IOException e)
@@ -147,14 +169,23 @@ public class CentroController implements Initializable
         //create a file chooser to save the file
         FileChooser fc = new FileChooser();
         fc.setTitle("Guardar Centro Comercial Como...");
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiro de texto", "*.txt"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiro de texto","*"+FileManager.TXT_FORMAT));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Centro Comercial","*"+FileManager.CENTRO_FORMAT));
+
         File selected = fc.showSaveDialog(CentroApplication.getMainStage());
 
         if (selected != null)
         {
             try
             {
-                FileManager.saveFile(selected.getAbsolutePath(), currentCentro);
+                if (isBinaryFile(selected.getAbsolutePath()))
+                {
+                    FileManager.saveBinaryFile(selected, currentCentro);
+                }
+                else
+                {
+                    FileManager.saveFile(selected.getAbsolutePath(), currentCentro);
+                }
                 currentFile = selected;
                 dirtyFile = false;
                 updateWindowTitle();
@@ -250,6 +281,8 @@ public class CentroController implements Initializable
 
         buttonBox.setDisable(true);
         saveItem.setDisable(true);
+        importItem.setDisable(true);
+        exportItem.setDisable(true);
         saveAsItem.setDisable(true);
         fecharItem.setDisable(true);
         tabPane.setDisable(true);
@@ -280,6 +313,8 @@ public class CentroController implements Initializable
         buttonBox.setDisable(false);
 
         saveItem.setDisable(false);
+        importItem.setDisable(false);
+        exportItem.setDisable(false);
         saveAsItem.setDisable(false);
         fecharItem.setDisable(false);
         tabPane.setDisable(false);
@@ -407,6 +442,36 @@ public class CentroController implements Initializable
         } catch (IOException e)
         {
             GUIUtils.errorMessage("Erro ao abrir novo centro comercial", e.getMessage());
+        }
+    }
+
+    private boolean isBinaryFile(String f)
+    {
+        return f.endsWith(FileManager.CENTRO_FORMAT);
+    }
+
+    public void openExportLojasWindow(ActionEvent actionEvent)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/centrocomercialgui/windowExport.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(this.getClass().getResource("/css/style.css").toExternalForm());
+            stage.setTitle("Exportar Lojas");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.show();
+
+            loader.<ExportLojasController>getController().initialize(this);
+        } catch (Exception e)
+        {
+            //alert for error message
+            GUIUtils.errorMessage("Erro ao abrir janela", "Erro: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

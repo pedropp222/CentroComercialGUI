@@ -1,14 +1,16 @@
 package com.example.centrocomercialgui.model.loja;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Classe que representa um centro comercial. Contém um ArrayList do tipo Loja e várias funcionalidades que permitem
  * realizar consultas e cálculos baseados nas suas lojas.
  */
-public class CentroComercial
+public class CentroComercial implements Serializable
 {
     private String nome;
     private String morada;
@@ -338,5 +340,20 @@ public class CentroComercial
     public ArrayList<Loja> getLojas()
     {
         return lojas;
+    }
+
+    public List<Loja> getLojasTipo(TipoLoja tipo)
+    {
+        List<Loja> l = new ArrayList<>();
+
+        for(Loja j : lojas)
+        {
+            if (j.getTipoLoja() == tipo)
+            {
+                l.add(j);
+            }
+        }
+
+        return l;
     }
 }

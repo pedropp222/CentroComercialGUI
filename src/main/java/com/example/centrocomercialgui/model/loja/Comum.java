@@ -51,4 +51,9 @@ public abstract class Comum extends ComFuncionarios
     {
         return contagem;
     }
+
+    public static void setContagem(int readInt)
+    {
+        contagem = readInt;
+    }
 }
